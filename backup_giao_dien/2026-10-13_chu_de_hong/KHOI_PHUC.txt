@@ -1,0 +1,5 @@
+Backup giao dien chu de hong (truoc khi them khung canh troi/mua).
+Khoi phuc: chep de cac file trong thu muc nay vao UNao_WebApp:
+  templates/index.html -> UNao_WebApp/templates/index.html
+  static/style.css, static/app.js, static/author.png -> UNao_WebApp/static/
+Neu khoi phuc thi xoa them UNao_WebApp/static/scene.js (khong bat buoc).

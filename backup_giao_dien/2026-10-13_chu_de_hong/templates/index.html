@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNao Vision</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Hình dùng chung: nơ hồng, mèo -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <symbol id="bow" viewBox="0 0 64 40">
+            <path d="M32 20C22 3 3 1 3 14c0 13 19 17 29 6z" fill="currentColor"/>
+            <path d="M32 20C42 3 61 1 61 14c0 13-19 17-29 6z" fill="currentColor"/>
+            <path d="M12 12c4-3 10-1 14 4M52 12c-4-3-10-1-14 4" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".6"/>
+            <ellipse cx="32" cy="20" rx="7.5" ry="8.5" fill="currentColor" stroke="#fff" stroke-width="2.5"/>
+        </symbol>
+        <symbol id="kitty" viewBox="0 0 100 90">
+            <path d="M14 38 10 6l28 16M86 38l4-32-28 16" fill="#fff" stroke="#4a2b3a" stroke-width="4" stroke-linejoin="round"/>
+            <ellipse cx="50" cy="52" rx="42" ry="33" fill="#fff" stroke="#4a2b3a" stroke-width="4"/>
+            <ellipse cx="34" cy="52" rx="4.5" ry="6" fill="#4a2b3a"/>
+            <ellipse cx="66" cy="52" rx="4.5" ry="6" fill="#4a2b3a"/>
+            <ellipse cx="50" cy="61" rx="5" ry="3.5" fill="#ff7aa8"/>
+            <path d="M44 67q6 5 12 0" stroke="#4a2b3a" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <ellipse cx="25" cy="64" rx="6" ry="3.5" fill="#ffc2d8"/>
+            <ellipse cx="75" cy="64" rx="6" ry="3.5" fill="#ffc2d8"/>
+            <path d="M4 52h16M5 60l15-3M96 52H80M95 60l-15-3" stroke="#4a2b3a" stroke-width="3" stroke-linecap="round"/>
+        </symbol>
+    </defs>
+</svg>
+
+<!-- Tim, nơ, lấp lánh bay nhẹ ở nền -->
+<div class="floaties" id="floaties" aria-hidden="true"></div>
+
+<div class="layout">
+
+    <!-- ========== THANH BÊN ========== -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg class="kitty" viewBox="0 0 100 90"><use href="#kitty"/></svg>
+                <svg class="brand-bow" viewBox="0 0 64 40"><use href="#bow"/></svg>
+            </div>
+            <div>
+                <div class="brand-name">UNao Vision</div>
+                <div class="brand-sub">Nhận diện u não · YOLO11</div>
+            </div>
+        </div>
+
+        <div class="nav-title">Chế độ nhận diện</div>
+        <button class="nav-item active" data-view="image">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>
+            Qua ảnh
+        </button>
+        <button class="nav-item" data-view="video">
+            <svg viewBox="0 0 24 24"><path d="m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+            Qua video
+        </button>
+        <button class="nav-item" data-view="camera">
+            <svg viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            Camera trực tiếp
+        </button>
+
+        <div class="nav-title">Hệ thống</div>
+        <button class="nav-item" data-view="settings">
+            <svg viewBox="0 0 24 24"><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4a2 2 0 0 0 .7 2.7l.2.1a2 2 0 0 1 1 1.7v.5a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.5a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            Cài đặt model
+        </button>
+
+        <!-- Tác giả: đổi tên ở đây -->
+        <div class="author">
+            <div class="author-photo">
+                <img src="{{ url_for('static', filename='author.png') }}" alt="Ảnh tác giả">
+                <svg class="author-bow" viewBox="0 0 64 40"><use href="#bow"/></svg>
+            </div>
+            <div class="author-text">
+                <div class="author-label">Tác giả</div>
+                <div class="author-name">Tên tác giả</div>
+                <div class="author-sub">Đồ án nhận diện khối u não bằng YOLO11</div>
+            </div>
+        </div>
+
+        <p class="sidebar-note">
+            Hệ thống thử nghiệm phục vụ học tập và nghiên cứu. Kết quả không thay thế chẩn đoán của bác sĩ.
+        </p>
+    </aside>
+
+    <!-- ========== NỘI DUNG ========== -->
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <h1 id="page-title">Nhận diện qua ảnh</h1>
+                <p id="page-sub">Tải ảnh MRI lên để phát hiện vùng nghi ngờ u não.</p>
+            </div>
+            <div class="model-badge" title="Model đang dùng">
+                <span class="dot"></span>
+                <span id="badge-model">Đang tải...</span>
+                <span class="pill" id="badge-device">-</span>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- ===== Khu vực chính ===== -->
+            <section class="panel">
+
+                <!-- Thanh công cụ: ẢNH -->
+                <div class="toolbar" data-for="image">
+                    <label class="btn primary">
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                        Chọn ảnh
+                        <input type="file" id="image-input" accept="image/*" hidden>
+                    </label>
+                    <span class="file-name" id="image-name">Chưa chọn ảnh</span>
+                    <span class="spacer"></span>
+                    <a class="btn ghost disabled" id="image-download" download>
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                        Tải kết quả
+                    </a>
+                </div>
+
+                <!-- Thanh công cụ: VIDEO -->
+                <div class="toolbar" data-for="video" hidden>
+                    <label class="btn primary">
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                        Chọn video
+                        <input type="file" id="video-input" accept="video/*,.mp4,.avi,.mov,.mkv,.wmv" hidden>
+                    </label>
+                    <span class="file-name" id="video-name">Chưa chọn video</span>
+                    <span class="spacer"></span>
+                    <button class="btn danger" id="video-stop" disabled>
+                        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                        Dừng
+                    </button>
+                    <a class="btn ghost disabled" id="video-download" download>
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+                        Tải video kết quả
+                    </a>
+                </div>
+
+                <!-- Thanh công cụ: CAMERA -->
+                <div class="toolbar" data-for="camera" hidden>
+                    <select id="camera-select">
+                        <option value="">Đang tìm camera...</option>
+                    </select>
+                    <input type="text" id="ip-url" placeholder="http://192.168.1.16:8080/video" hidden>
+                    <button class="btn primary" id="camera-start">
+                        <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg>
+                        Bắt đầu
+                    </button>
+                    <button class="btn danger" id="camera-stop" hidden>
+                        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                        Dừng
+                    </button>
+                    <span class="spacer"></span>
+                    <button class="btn ghost icon" id="camera-refresh" title="Tìm lại camera">
+                        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+                    </button>
+                    <button class="btn ghost" id="camera-snap" disabled>
+                        <svg viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                        Chụp
+                    </button>
+                </div>
+
+                <div class="progress" id="video-progress-wrap" hidden><div id="video-progress"></div></div>
+                <div class="message" id="message" hidden></div>
+
+                <!-- Khung hiển thị -->
+                <div class="stage" id="stage">
+                    <div class="empty" id="empty">
+                        <div class="empty-kitty">
+                            <svg viewBox="0 0 100 90"><use href="#kitty"/></svg>
+                            <svg class="empty-bow" viewBox="0 0 64 40"><use href="#bow"/></svg>
+                        </div>
+                        <strong id="empty-title">Chưa có ảnh</strong>
+                        <span id="empty-text">Bấm “Chọn ảnh” hoặc kéo thả ảnh MRI vào đây.</span>
+                    </div>
+                    <img id="view" alt="Kết quả nhận diện" hidden>
+                </div>
+
+                <!-- Trang cài đặt model -->
+                <div class="settings-page" id="settings-page" hidden>
+                    <div class="field">
+                        <label for="model-select">File model (thư mục <code>models/</code>)</label>
+                        <div class="row">
+                            <select id="model-select"></select>
+                            <button class="btn primary" id="model-load">Nạp model</button>
+                        </div>
+                    </div>
+                    <dl class="info">
+                        <dt>Model đang dùng</dt><dd id="info-model">-</dd>
+                        <dt>Thiết bị</dt><dd id="info-device">-</dd>
+                        <dt>Nhãn của model</dt><dd id="info-classes">-</dd>
+                        <dt>Kích thước ảnh đầu vào</dt><dd id="info-imgsz">-</dd>
+                    </dl>
+                    <p class="hint">
+                        Muốn dùng model khác: chép file <code>.pt</code> vào thư mục <code>models/</code>,
+                        tải lại trang rồi chọn ở trên.
+                    </p>
+                </div>
+
+            </section>
+
+            <!-- ===== Cột phải ===== -->
+            <aside class="side">
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Ngưỡng tin cậy</h2>
+                        <span class="value-pill" id="conf-value">0.25</span>
+                    </div>
+                    <input type="range" id="conf" min="0.05" max="0.95" step="0.01" value="0.25">
+                    <div class="range-labels"><span>Nhiều khung</span><span>Chắc chắn hơn</span></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Ảnh đầu vào</h2>
+                    </div>
+                    <div class="field">
+                        <label for="imgsz">Kích thước ảnh đưa vào model</label>
+                        <select id="imgsz"></select>
+                    </div>
+                    <div class="field" id="zoom-field" hidden>
+                        <div class="card-head">
+                            <label for="zoom">Zoom camera</label>
+                            <span class="value-pill" id="zoom-value">1.0x</span>
+                        </div>
+                        <input type="range" id="zoom" min="1" max="4" step="0.1" value="1">
+                    </div>
+                    <p class="hint" id="input-hint">
+                        Lớn hơn (800–1280) bắt được vùng nhỏ tốt hơn nhưng chậm hơn.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Kết quả</h2>
+                    </div>
+                    <div class="tiles">
+                        <div class="tile main" id="tile-count">
+                            <strong id="stat-count">0</strong>
+                            <span>vùng u</span>
+                        </div>
+                        <div class="tile">
+                            <strong id="stat-ms">-</strong>
+                            <span>ms / khung</span>
+                        </div>
+                        <div class="tile">
+                            <strong id="stat-fps">-</strong>
+                            <span>FPS</span>
+                        </div>
+                    </div>
+                    <div class="status" id="status">Chưa có kết quả</div>
+
+                    <div class="sub-title">Chi tiết</div>
+                    <ul class="det-list" id="det-list">
+                        <li class="muted">Không phát hiện vùng nghi ngờ nào</li>
+                    </ul>
+
+                    <div id="video-stats" hidden>
+                        <div class="sub-title">Thống kê video</div>
+                        <dl class="info compact">
+                            <dt>Frame đã xử lý</dt><dd id="vs-frames">0</dd>
+                            <dt>Frame có u</dt><dd id="vs-tumor">0</dd>
+                            <dt>Tin cậy cao nhất</dt><dd id="vs-max">-</dd>
+                        </dl>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
